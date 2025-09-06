@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+
 /**
  * Utility class for handling JSON Web Tokens (JWT) operations.
  * <p>
@@ -37,7 +38,7 @@ public class JwtUtil {
      * @param details The {@link UserDetails} containing the username for the subject of the token.
      * @return The generated JWT token as a String.
      */
-    @SuppressWarnings("deprecation")
+     @SuppressWarnings("deprecation")
     private String generateToken(Map<String, Object> extraClaims, UserDetails details){
         return Jwts.builder().setClaims(extraClaims).setSubject(details.getUsername())
                     .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -85,7 +86,7 @@ public class JwtUtil {
      * @return The {@link Claims} extracted from the token.
      */
     private Claims extractAllClaims(String token){
-        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(getSigningKey()).parseClaimsJws(token).getBody();
     }
 
     /**

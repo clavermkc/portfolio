@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import service.implement.SkillServiceImplment;
 import repositories.SkillRepository;
 
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 
@@ -24,16 +24,18 @@ public class SkillService implements SkillServiceImplment {
     public SkillService(SkillRepository skillRepository) {
         this.skillRepository = skillRepository;
     }
+
     @Override
     public void createSkill(SkillDto skillDto) {
         Skill skill = Skill.builder().category(skillDto.getCategory()).
-                skill_name(skillDto.getSkill_name()).framework(skillDto.getFramework()).
+                skill_name(skillDto.getSkill_name()).
+                framework(skillDto.getFramework()).
                 icon(skillDto.getIcon()).
                 build();
         //add it in der collection
         skill.getSKillCollection().add(skill);
         //skill muss eindeutig sein
-        for(Skill skill_ : skill.getSKillCollection()) {
+        for (Skill skill_ : skill.getSKillCollection()) {
             if (skill_.getSkill_name().equals(skillDto.getSkill_name())) {
                 log.debug("skill can not be created because another skill with the same name existed");
                 return;
@@ -42,7 +44,7 @@ public class SkillService implements SkillServiceImplment {
         skillRepository.save(skill);
     }
 
-//we assume that skill doesn't have a dependencies with another entities and is not transactional
+    //we assume that skill doesn't have a dependencies with another entities and is not transactional
     @Override
     public void deleteSkill(Long id) {
         log.info("Attempting to delete skill with ID: {}", id);
@@ -57,7 +59,26 @@ public class SkillService implements SkillServiceImplment {
 
 
     @Override
-    public void getAllSkills() {
-        skillRepository.findAll();
+    public List<SkillDto> getAllSkills() {
+        if (!skillRepository.findAll().isEmpty()) {
+            List<Skill> skills = skillRepository.findAll();
+           return skills.stream().map(this::mapToSkillDto).collect(Collectors.toList());
+        }
+        return List.of();
     }
+
+    private SkillDto mapToSkillDto(Skill skill) {
+       return SkillDto.builder().
+                skill_name(skill.getSkill_name()).
+                framework(skill.getFramework()).
+                icon(skill.getIcon()).
+                build();
+    }
+
+    @Override
+    public SkillDto getSkillDtoById(Long id) {
+        Skill skill= skillRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Skill with id " + id + " not found"));
+       return  mapToSkillDto(skill);
+    }
+
 }
