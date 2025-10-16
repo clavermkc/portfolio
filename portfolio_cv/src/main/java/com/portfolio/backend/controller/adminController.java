@@ -15,7 +15,8 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("api/auth")
+//@RequestMapping("api/admin")
+@RequestMapping("api/v0")
   //uniquement avec authentification admin
 @RequiredArgsConstructor
 public class adminController {
@@ -25,14 +26,14 @@ public class adminController {
     /*++++++++++skills++++++++++*/
 
 
-    @PostMapping("admin/post-skill")
+    @PostMapping("/post-skill")
     public ResponseEntity<SkillDto> postSkill( @RequestBody SkillDto skillDto) {
         skillService.createSkill(skillDto);
         log.info("skill{} created", skillDto);
         return ResponseEntity.ok().body(skillDto);
     }
     @GetMapping("/getSkills")
-    public List<SkillDto> getSkills(@RequestBody List<SkillDto> skillDtoSet) {
+    public List<SkillDto> getSkills() {
         //was passiert wenn das schiefgeht?
         return skillService.getAllSkills();
 

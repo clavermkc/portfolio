@@ -52,6 +52,13 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.19.0</version>
 		</dependency>
+		<!--Rest api documentation generator -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.8.13</version>
+		</dependency>
+
 		<!--Icons repo -->
 		<dependency>
 			<groupId>org.silentsoft</groupId>

@@ -33,7 +33,7 @@ public class User  implements UserDetails {
      * The unique identifier for the user.
      * This is the primary key and is generated automatically by the database.
      */
-    @Id
+        @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     /**

@@ -62,12 +62,22 @@ public class WebSecurityConfiguration {
      * @throws Exception if an error occurs during configuration
      */
     @Bean
-    public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(request ->
-                        request.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/message/**").permitAll()
-                                .requestMatchers("api/admin/**").hasRole("ADMIN")
+                        request
+                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/api/v0/**").permitAll()
+                                .requestMatchers(
+                                        "/swagger-ui.html",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui/index.html",
+                                        "/v3/api-docs/**",
+                                        "/api-docs/**",
+                                        "/webjars/**",
+                                        "/swagger-resources/**",
+                                        "/favicon.ico").permitAll()
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
